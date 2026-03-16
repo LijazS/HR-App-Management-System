@@ -51,12 +51,29 @@ function getChatbotResponse(query) {
 
 
 let db;
-MongoClient.connect(MONGO_URI, { useUnifiedTopology: true })
-  .then(client => {
-    db = client.db(DB_NAME);
-    app.listen(PORT,"0.0.0.0", () => console.log(`Server running on http://localhost:${PORT}`));
-  })
-  .catch(err => console.error('MongoDB connection error:', err));
+
+async function connectWithRetry() {
+  const client = new MongoClient(MONGO_URI); // create MongoClient instance
+  while (true) {
+    try {
+      await client.connect();                 // attempt connection
+      db = client.db(DB_NAME);                // assign DB
+      console.log("Connected to MongoDB");
+      break;                                  // exit loop on success
+    } catch (err) {
+      console.error("MongoDB not ready, retrying in 5s...", err.message);
+      await new Promise(resolve => setTimeout(resolve, 5000)); // wait 5s before retry
+    }
+  }
+
+  // Start Express server only after DB is ready
+  app.listen(PORT, "0.0.0.0", () => {
+    console.log(`Server running on http://0.0.0.0:${PORT}`);
+  });
+}
+
+// Call the retry function
+connectWithRetry();
 
 // Signup API
 app.post('/api/signup', async (req, res) => {
