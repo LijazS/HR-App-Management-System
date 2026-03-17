@@ -14,4 +14,4 @@ spec:
           from: All
   addresses:
     - type: IPAddress
-      value: 65.2.148.126
+      value: 65.2.148.126  
