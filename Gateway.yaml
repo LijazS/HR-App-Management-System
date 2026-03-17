@@ -12,3 +12,6 @@ spec:
       allowedRoutes:
         namespaces:
           from: All
+  addresses:
+    - type: IPAddress
+      value: 65.2.148.126

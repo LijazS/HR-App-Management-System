@@ -8,12 +8,12 @@ spec:
     - name: http
       namespace: kgateway-system
   hostnames:
-    - "frontend.local"   # fake internal hostname
+    - "65.2.148.126"    # use public IP since no domain
   rules:
     - matches:
         - path:
             type: PathPrefix
-            value: "/"          # root path
+            value: "/"     # root path
       backendRefs:
-        - name: hr-service
-          port: 3000            # Service port
+        - name: hr-service    # your service name
+          port: 3000         # service port
