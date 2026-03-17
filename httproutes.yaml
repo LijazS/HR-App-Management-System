@@ -8,12 +8,12 @@ spec:
     - name: http
       namespace: kgateway-system
   hostnames:
-    - "*"       
+    - "frontend.local"   # fake internal hostname
   rules:
     - matches:
         - path:
-            type: Prefix
-            value: "/"         # root path
+            type: PathPrefix
+            value: "/"          # root path
       backendRefs:
-        - name: hr-service        # the service name
-          port: 3000           
+        - name: hr-service
+          port: 3000            # Service port
